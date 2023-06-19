@@ -1,8 +1,8 @@
-"""create tables
+"""empty message
 
-Revision ID: 776815808fab
+Revision ID: e19653c45ee4
 Revises: 
-Create Date: 2023-06-15 09:24:23.584074
+Create Date: 2023-06-19 10:06:56.669641
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '776815808fab'
+revision = 'e19653c45ee4'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -28,12 +28,6 @@ def upgrade():
     sa.Column('notes', sa.String(), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.Column('trip_id', sa.Integer(), nullable=True),
-    sa.Column('itinerary_id', sa.Integer(), nullable=True),
-    sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['itinerary_id'], ['itineraries.id'], name=op.f('fk_activities_itinerary_id_itineraries')),
-    sa.ForeignKeyConstraint(['trip_id'], ['trips.id'], name=op.f('fk_activities_trip_id_trips')),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], name=op.f('fk_activities_user_id_users')),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('destinations',
@@ -43,19 +37,6 @@ def upgrade():
     sa.Column('image_url', sa.String(), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('itineraries',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('weekday', sa.String(), nullable=True),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
-    sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.Column('trip_id', sa.Integer(), nullable=True),
-    sa.Column('activity_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['activity_id'], ['activities.id'], name=op.f('fk_itineraries_activity_id_activities')),
-    sa.ForeignKeyConstraint(['trip_id'], ['trips.id'], name=op.f('fk_itineraries_trip_id_trips')),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], name=op.f('fk_itineraries_user_id_users')),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('trips',
@@ -68,10 +49,39 @@ def upgrade():
     sa.Column('notes', sa.String(), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.Column('user_trips_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], name=op.f('fk_trips_user_id_users')),
-    sa.ForeignKeyConstraint(['user_trips_id'], ['user_trips.id'], name=op.f('fk_trips_user_trips_id_user_trips')),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('users',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('username', sa.String(), nullable=True),
+    sa.Column('email', sa.String(), nullable=True),
+    sa.Column('_password_hash', sa.String(length=30), nullable=True),
+    sa.Column('first_name', sa.String(), nullable=True),
+    sa.Column('last_name', sa.String(), nullable=True),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
+    sa.Column('updated_at', sa.DateTime(), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('email')
+    )
+    op.create_table('itineraries',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('weekday', sa.String(), nullable=True),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
+    sa.Column('updated_at', sa.DateTime(), nullable=True),
+    sa.Column('trip_id', sa.Integer(), nullable=True),
+    sa.Column('activity_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['activity_id'], ['activities.id'], name=op.f('fk_itineraries_activity_id_activities')),
+    sa.ForeignKeyConstraint(['trip_id'], ['trips.id'], name=op.f('fk_itineraries_trip_id_trips')),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('trip_destinations',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
+    sa.Column('updated_at', sa.DateTime(), nullable=True),
+    sa.Column('trip_id', sa.Integer(), nullable=True),
+    sa.Column('destination_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['destination_id'], ['destinations.id'], name=op.f('fk_trip_destinations_destination_id_destinations')),
+    sa.ForeignKeyConstraint(['trip_id'], ['trips.id'], name=op.f('fk_trip_destinations_trip_id_trips')),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('user_trips',
@@ -84,36 +94,16 @@ def upgrade():
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], name=op.f('fk_user_trips_user_id_users')),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('users',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('username', sa.String(), nullable=True),
-    sa.Column('email', sa.String(), nullable=True),
-    sa.Column('_password_hash', sa.String(length=30), nullable=True),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
-    sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('email')
-    )
-    op.create_table('trip_destinations',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
-    sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.Column('trip_id', sa.Integer(), nullable=True),
-    sa.Column('destination_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['destination_id'], ['destinations.id'], name=op.f('fk_trip_destinations_destination_id_destinations')),
-    sa.ForeignKeyConstraint(['trip_id'], ['trips.id'], name=op.f('fk_trip_destinations_trip_id_trips')),
-    sa.PrimaryKeyConstraint('id')
-    )
     # ### end Alembic commands ###
 
 
 def downgrade():
     # ### commands auto generated by Alembic - please adjust! ###
-    op.drop_table('trip_destinations')
-    op.drop_table('users')
     op.drop_table('user_trips')
-    op.drop_table('trips')
+    op.drop_table('trip_destinations')
     op.drop_table('itineraries')
+    op.drop_table('users')
+    op.drop_table('trips')
     op.drop_table('destinations')
     op.drop_table('activities')
     # ### end Alembic commands ###
