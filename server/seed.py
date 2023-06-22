@@ -81,11 +81,20 @@ if __name__ == '__main__':
         print( "Creating Activities..." )
         activities = []
         for i in range( 49 ):
+
+            time_sentence = fake.sentence()
+            if "am" not in time_sentence and "pm" not in time_sentence:
+                time_sentence += " " + rc(["am", "pm"])
+
+            duration_sentence = fake.sentence()
+            if "mins" not in duration_sentence and "hrs" not in duration_sentence:
+                duration_sentence += " " + rc(["mins", "hrs"])
+
             activity = Activity(
                 name = fun_activities[ i ],
                 description = fake.paragraph( nb_sentences=2 ),
-                time = fake.time( pattern="%H:%M" ),
-                duration = fake.random_int( min=20, max=180 ),
+                time = time_sentence,
+                duration = duration_sentence,
                 location = fake.city(),
                 notes = fake.paragraph( nb_sentences=2 )
             )

@@ -1,50 +1,34 @@
-# Phase 4 Full-Stack Application Project Template
-
-## Learning Goals
-
-- Discuss the basic directory structure of a full-stack Flask/React application.
-- Carry out the first steps in creating your Phase 4 project.
-
-***
 
 ## Introduction
+Db Schema:
+One user can have multiple trips (One-to-Many relationship: User -> Trips).
+One trip can have multiple destinations (Many-to-Many relationship: Trip -> Destinations).
+One trip can have multiple activities (Many-to-Many relationship: Trip -> Activities).
+One trip can have multiple itineraries (One-to-Many relationship: Trip -> Itineraries).
+One user can participate in multiple trips, and each trip can have multiple participants (Many-to-Many relationship: User -> UserTrips -> Trip).
+One trip can include multiple destinations, and each destination can be part of multiple trips (Many-to-Many relationship: Trip -> TripDestinations -> Destination).
+One trip can have multiple activities, and each activity can be part of multiple trips(Many-to-Many relationship: Trip -> Itinerary -> Activity).
 
-Fork and clone this lesson for a template for your full-stack application. Take
-a look at the directory structure before we begin:
+Summary of the relationships and their corresponding tables:
 
-```console
-$ tree -L 2
-$ # the -L argument limits the depth at which we look into the directory structure
-.
-├── CONTRIBUTING.md
-├── LICENSE.md
-├── README.md
-├── client
-│   ├── README.md
-│   ├── node_modules
-│   ├── package-lock.json
-│   ├── package.json
-│   ├── public
-│   └── src
-└── server
-    ├── app.py
-    ├── config.py
-    ├── migrations
-    ├── models.py
-    └── seed.py
-```
+User (One) -> Trip (Many)
 
-> **Note: You may already know some or all of the material covered in this
-> lesson. We hope that having it all in one place will help you in designing
-> and developing your project, regardless of where you're starting off.**
+UserTrip (Mapping table representing the participation of users in trips)
+Trip (Many) <-> Destination (Many)
 
-***
+TripDestination (Mapping table representing the inclusion of destinations in trips)
+Trip (Many) <-> Activity (Many)
 
-## Where Do I Start?
+Itinerary (Mapping table representing the association of activities with trips)
+To summarize the relationships:
 
-Just as with your Phase 3 Project, this will likely be one of the biggest
-projects you've undertaken so far. Your first task should be creating a Git
-repository to keep track of your work and roll back any undesired changes.
+Each User can have multiple Trips.
+Each Trip can have multiple Destinations.
+Each Trip can have multiple Activities.
+Each Trip can have multiple Itineraries.
+Each User can participate in multiple Trips, and each Trip can have multiple participants.
+Each Trip can include multiple Destinations, and each Destination can be part of multiple Trips.
+Each Trip can have multiple Activities, and each Activity can be part of multiple Trips.
 
 ### Removing Existing Git Configuration
 
