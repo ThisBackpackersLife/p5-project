@@ -61,8 +61,8 @@ class User( db.Model, SerializerMixin ):
         self.password_hash = password
 
     def authenticate( self, password ):
-        return Bcrypt.check_password_hash(
-            self._password_hash, password.encode( 'utf-8' )
+        return bcrypt.check_password_hash(
+           self._password_hash, password.encode( 'utf-8' )
         )
     
     @validates( 'username' )
