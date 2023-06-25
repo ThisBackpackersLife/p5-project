@@ -9,8 +9,10 @@ from flask_restful import Resource
 # Local imports
 from config import app, db, api, Bcrypt
 from models import User, Trip, UserTrip, Destination, TripDestination, Activity, Itinerary
-# Views go here!
 
+bcrypt = Bcrypt()
+
+# Routes go here!
 @app.route('/')
 def home():
     return '<h1>Welcome to ExploreMate!</h1>'
@@ -32,10 +34,11 @@ class Signup( Resource ):
 
         try:
             username = request.get_json()[ 'username' ]
+            print(request.get_json())
             email = request.get_json()[ 'email' ]
             password = request.get_json()[ 'password' ]
-            first_name = request.get_json()[ 'first_name' ]
-            last_name = request.get_json()[ 'last_name' ]
+            first_name = request.get_json()[ 'firstName' ]
+            last_name = request.get_json()[ 'lastName' ]
 
         except KeyError:
             return { "error": "Missing a required field in the form." }, 400
@@ -47,7 +50,13 @@ class Signup( Resource ):
                 first_name = first_name,
                 last_name = last_name
             )
+            
+            password_hash = bcrypt.generate_password_hash(
+                password.encode( 'utf-8' )
+            )
+            self._password_hash = password_hash.decode( 'utf-8' )
             new_user.password_hash = password
+            
             db.session.add( new_user )
             db.session.commit()
 
@@ -55,7 +64,7 @@ class Signup( Resource ):
         
             return new_user.u_to_dict(), 201
         else:
-            return { "error": "Username and Password required." }, 422
+            return { "error": "All fields are required." }, 422
 
 api.add_resource( Signup, '/signup', endpoint = 'signup' )
 
