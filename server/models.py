@@ -13,10 +13,8 @@ bcrypt = Bcrypt()
 
 
 # Models go here!
-class User( db.Model, SerializerMixin ):
+class User( db.Model ):
     __tablename__ = 'users' 
-
-    # serialize_rules = ( '-user_trips.user', '-trips.users', )
 
     id = db.Column( db.Integer, primary_key=True )
     username = db.Column( db.String )
@@ -96,10 +94,8 @@ class User( db.Model, SerializerMixin ):
             abort( 422, "Name must be a string." )
 
 
-class Itinerary( db.Model, SerializerMixin ):
+class Itinerary( db.Model ):
     __tablename__ = 'itineraries'
-
-    # serialize_rules = ( '-trip.itineraries', '-activity.itineraries', )
 
     id = db.Column( db.Integer, primary_key=True )
     weekday = db.Column( db.String )
@@ -146,10 +142,8 @@ class Itinerary( db.Model, SerializerMixin ):
             abort( 422, "Activity id must be an instance of Activity greater than 0." )
 
     
-class Trip( db.Model, SerializerMixin ):
+class Trip( db.Model ):
     __tablename__ = 'trips'
-
-    # serialize_rules = ( '-users.trips', '-user_trips.trips', '-users.trips', '-trip_destinations.trip', '-activities.trips', '-itineraries.trips', )
 
     id = db.Column( db.Integer, primary_key=True )
     name = db.Column( db.String )
@@ -228,10 +222,8 @@ class Trip( db.Model, SerializerMixin ):
             abort( 422, "Notes must be a string under 500 characters." )
 
     
-class UserTrip( db.Model, SerializerMixin ):
+class UserTrip( db.Model ):
     __tablename__ = 'user_trips'
-
-    # serialize_rules = ( '-trip.user_trips', '-user.user_trips', )
 
     id = db.Column( db.Integer, primary_key=True )
     created_at = db.Column( db.DateTime, server_default=db.func.now() )
@@ -268,10 +260,8 @@ class UserTrip( db.Model, SerializerMixin ):
             abort( 422, "Trip id must be an instance of Trip greater than 0." )
 
     
-class Destination( db.Model, SerializerMixin ):
+class Destination( db.Model ):
     __tablename__ = 'destinations'
-
-    # serialize_rules = ( '-destinations.trips', '-trip_destinations.trip', )
 
     id = db.Column( db.Integer, primary_key=True )
     name = db.Column( db.String )
@@ -315,10 +305,8 @@ class Destination( db.Model, SerializerMixin ):
         else:
             abort( 422, "Image url must be a string." )
     
-class TripDestination( db.Model, SerializerMixin ):
+class TripDestination( db.Model ):
     __tablename__ = 'trip_destinations'
-
-    # serialize_rules = ( '-trip.trip_destinations', '-user.trip_destinations', )
 
     id = db.Column( db.Integer, primary_key=True )
     created_at = db.Column( db.DateTime, server_default=db.func.now() )
@@ -355,10 +343,8 @@ class TripDestination( db.Model, SerializerMixin ):
             abort( 422, "Destination id must be an instance of Destination greater than 0." )
 
     
-class Activity( db.Model, SerializerMixin ):
+class Activity( db.Model ):
     __tablename__ = 'activities'
-
-    # serialize_rules = ( '-itineraries.activity', '-trips.activities', )
 
     id = db.Column( db.Integer, primary_key=True )
     name = db.Column( db.String )

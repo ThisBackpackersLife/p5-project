@@ -5,15 +5,17 @@
 # Remote library imports
 from flask import Flask, make_response, jsonify, request, session
 from flask_restful import Resource
+import googlemaps
 
 # Local imports
 from config import app, db, api, Bcrypt
 from models import User, Trip, UserTrip, Destination, TripDestination, Activity, Itinerary
 
 bcrypt = Bcrypt()
+gmaps = googlemaps.Client( key='AIzaSyDXoFdtIHKYZ46qFjJsHzznE80hBonPo4s' )
 
 # Routes go here!
-@app.route('/')
+@app.route( '/' )
 def home():
     return '<h1>Welcome to ExploreMate!</h1>'
 
@@ -162,7 +164,7 @@ class UsersByID( Resource ):
         else: 
             return { "error": "User not found." }, 404
 
-api.add_resource( UsersByID, '/users/<int:id>' )
+api.add_resource( UsersByID, '/users/<int:id>', endpoint='users_by_id' )
        
 class Itineraries( Resource ):
 
@@ -183,7 +185,7 @@ class ItinerariesByID( Resource ):
         else: 
             return { "error": "Itinerary not found." }, 404
 
-api.add_resource( ItinerariesByID, '/itineraries/<int:id>' )
+api.add_resource( ItinerariesByID, '/itineraries/<int:id>', endpoint='itineraries_by_id' )
 
 class Trips( Resource ):
 
@@ -258,7 +260,7 @@ class TripsByID( Resource ):
         else: 
             return { "error": "User not found." }, 404
 
-api.add_resource( TripsByID, '/trips/<int:id>' )
+api.add_resource( TripsByID, '/trips/<int:id>', endpoint='trips_by_id' )
 
 class UserTrips( Resource ):
     
@@ -279,7 +281,7 @@ class UserTripsByID( Resource ):
         else: 
             return { "error": "UserTrip not found." }, 404
         
-api.add_resource( UserTripsByID, '/user_trips/<int:id>' )
+api.add_resource( UserTripsByID, '/user_trips/<int:id>', endpoint='user_trips_by_id' )
 
 class Destinations( Resource ):
 
@@ -345,7 +347,7 @@ class DestinationsByID( Resource ):
         else: 
             return { "error": "Destination not found." }, 404
         
-api.add_resource( DestinationsByID, '/destinations/<int:id>' )
+api.add_resource( DestinationsByID, '/destinations/<int:id>', endpoint='destinations_by_id' )
 
 class TripDestinations( Resource ):
     
@@ -366,7 +368,7 @@ class TripDestinationsByID( Resource ):
         else: 
             return { "error": "TripDestination not found." }, 404
         
-api.add_resource( TripDestinationsByID, '/trip_destinations/<int:id>' )
+api.add_resource( TripDestinationsByID, '/trip_destinations/<int:id>', endpoint='trip_destinations_by_id' )
 
 class Activities( Resource ):
 
@@ -441,7 +443,7 @@ class ActivitiesByID( Resource ):
         else: 
             return { "error": "Activity not found." }, 404
         
-api.add_resource( ActivitiesByID, '/activities/<int:id>' )
+api.add_resource( ActivitiesByID, '/activities/<int:id>', endpoint='activities_by_id' )
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
