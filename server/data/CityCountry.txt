@@ -1,0 +1,69 @@
+Reykjavik, Iceland
+Dubrovnik, Croatia
+Santorini, Greece
+Barcelona, Spain
+Prague, Czech Republic
+Vienna, Austria
+Amsterdam, Netherlands
+Paris, France
+Venice, Italy
+Edinburgh, Scotland
+Budapest, Hungary
+Berlin, Germany
+Istanbul, Turkey
+Athens, Greece
+Rome, Italy
+Dublin, Ireland
+Tokyo, Japan
+Seoul, South Korea
+Shanghai, China
+Singapore, Singapore
+Hanoi, Vietnam
+Taipei, Taiwan
+Kuala Lumpur, Malaysia
+Dubai, United Arab Emirates
+Jerusalem, Israel
+Petra, Jordan
+Cairo, Egypt
+St. Petersburg, Russia
+Samarkand, Uzbekistan
+Baku, Azerbaijan
+Tbilisi, Georgia
+Bali, Indonesia
+Sydney, Australia
+Queenstown, New Zealand
+Melbourne, Australia
+Gili Islands, Indonesia
+Granada, Nicaragua
+Panama City, Panama
+Roatán, Honduras
+Monteverde Cloud Forest, Costa Rica
+Caye Caulker, Belize
+Suchitoto, El Salvador
+Lake Atitlán, Guatemala
+Rio de Janeiro, Brazil
+Machu Picchu, Peru
+Buenos Aires, Argentina
+Serengeti National Park, Tanzania
+Galapagos Islands, Ecuador
+Patagonia, Chile
+Uyuni Salt Flats, Bolivia
+Iguazu Falls, Argentina/Brazil
+Medellín, Colombia
+New Orleans, United States
+Honolulu, United States
+Denver, Colorado, United States
+Glacier National Park, Montana, United States
+Grand Canyon, Arizona, United States
+Yosemite National Park, California, United States
+New York City, New York, United States
+Miami, Florida, United States
+Bryce Canyon National Park, Utah, United States
+Seattle, Washington, United States
+Denali National Park and Preserve, Alaska, United States
+Vancouver, British Columbia
+Banff National Park, Alberta
+Niagara Falls, Ontario
+Whistler, British Columbia
+Montreal, Quebec
+Toronto, Ontario

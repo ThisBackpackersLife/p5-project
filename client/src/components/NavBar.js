@@ -1,6 +1,8 @@
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
-// import "./App.css";
+// mui imports go here:
+// import { Button } from "@mui/material";
+// local imports go here:
 import Logo from "../images/Logo.png";
 import UserIcon from "../images/UserIcon.png";
 import httpClient from "./httpClient";

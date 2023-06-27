@@ -14,6 +14,8 @@ from models import User, Trip, UserTrip, Destination, TripDestination, Activity,
 image_url = open( "./data/ImageUrls.txt", "r" )
 weekday = open( "./data/Weekdays.txt", "r" )
 fun_activity = open( "./data/Activity.txt", "r" )
+place = open( "./data/CityCountry.txt", "r" )
+description = open( "./data/DestDescription.txt", "r" )
 
 if __name__ == '__main__':
     fake = Faker()
@@ -22,6 +24,8 @@ if __name__ == '__main__':
         urls = []
         weekdays = []
         fun_activities = []
+        places = []
+        descriptions = []
 
         for image in image_url:
             urls.append( image.replace("\n","") )
@@ -29,7 +33,10 @@ if __name__ == '__main__':
             weekdays.append( day.replace("\n", "") )
         for activity in fun_activity:
             fun_activities.append( activity.replace("\n", "") )
-
+        for place in place:
+            places.append( place. replace("\n", "" ) )
+        for description in description:
+            descriptions.append( description.replace("\n", "" ) )
 
         print( "Starting seed..." )
         # Seed code goes here!
@@ -70,11 +77,11 @@ if __name__ == '__main__':
 
         print( "Creating Destinations..." )
         destinations = []
-        for i in range( 49 ):
+        for i in range( 69 ):
             destination = Destination(
-                name = fake.city(),
-                description = fake.paragraph( nb_sentences=2 ),
-                image_url = urls[ randint(0, 49 ) ]
+                name = places[ i-1 ],
+                description = descriptions[ i-1 ],
+                image_url = urls[ i-1 ]
             )
             destinations.append( destination )
         
