@@ -14,6 +14,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import httpClient from "./httpClient";
+import { UserContext } from './UserContext';
+import { useContext } from 'react';
 
 function Copyright(props) {
   return (
@@ -34,14 +36,8 @@ const defaultTheme = createTheme();
 
 function Login() {
 
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   const data = new FormData(event.currentTarget);
-  //   console.log({
-  //     email: data.get('email'),
-  //     password: data.get('password'),
-  //   });
-  // };
+  const { user, setUser } = useContext( UserContext )
+
   const [ email, setEmail ] = useState( "" )
   const [ username, setUsername ] = useState( "" )
   const [ password, setPassword ] = useState( "" )
@@ -54,6 +50,9 @@ function Login() {
             username,
             password,
         })
+        const user = response.data.user
+        setUser( user )
+
         window.location.href = "/trips"
     }
     catch ( error ) {

@@ -1,21 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
-// mui imports go here:
-// import { Button } from "@mui/material";
-// local imports go here:
 import Logo from "../images/Logo.png";
 import UserIcon from "../images/UserIcon.png";
 import httpClient from "./httpClient";
+import Trips from "./Trips";
+import { UserContext } from "./UserContext";
+// import { useContext } from "react";
 
-function NavBar({ user, userData, changeSetUser, toggleTheme, isDarkMode }) {
 
+function NavBar({ toggleTheme, isDarkMode, trips }) {
+
+    const { user, setUser } = useContext( UserContext )
+    
     const history = useHistory()
     
     const logout = async () => {
         try {
             await httpClient.delete( '/logout' )
             await httpClient.delete( '/clear' )
-            changeSetUser()
+            setUser( null )
             history.push( "/login" )
         } catch ( error ) {
             console.error( "Logout failed." )
@@ -44,11 +47,12 @@ function NavBar({ user, userData, changeSetUser, toggleTheme, isDarkMode }) {
                             Destinations
                         </Link>
                     </div>
-                    { user !== "" ? (
+                    { user !== null ? (
                         <div className="active user-icon-container">
                             <Link to="/trips" className="link">
                                 <img src={ UserIcon } alt="User Icon"></img>
                             </Link>
+                            <Trips trips={ trips } />
                         </div>
                     ): (
                         <div className="active user-icon-container" >
@@ -57,7 +61,7 @@ function NavBar({ user, userData, changeSetUser, toggleTheme, isDarkMode }) {
                             </Link>
                         </div>
                     )}
-                    {user !== "" && ( 
+                    { user !== null && ( 
                         <div className="active user-icon-container">
                         <button onClick={ logout }>Logout</button>
                         </div>
