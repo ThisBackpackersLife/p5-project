@@ -1,10 +1,7 @@
 from sqlalchemy.orm import validates
 from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.hybrid import hybrid_property
 from flask import abort
-from sqlalchemy import Date
-from datetime import datetime, date
 
 
 from config import db, Bcrypt
@@ -29,7 +26,7 @@ class User( db.Model ):
     trips = association_proxy( 'user_trips', 'trip', creator=lambda t: UserTrip( trip=t ) )
     
     def __repr__( self ):
-        return f'<User { self.first_name }, username:{ self.username } ID:{ self.id }/>'
+        return f'<User username:{ self.username } ID:{ self.id }/>'
     
     def u_to_dict( self ):
         return {

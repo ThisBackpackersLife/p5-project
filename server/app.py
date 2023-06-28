@@ -5,14 +5,12 @@
 # Remote library imports
 from flask import Flask, make_response, jsonify, request, session
 from flask_restful import Resource
-import googlemaps
 
 # Local imports
 from config import app, db, api, Bcrypt
 from models import User, Trip, UserTrip, Destination, TripDestination, Activity, Itinerary
 
 bcrypt = Bcrypt()
-gmaps = googlemaps.Client( key='AIzaSyDXoFdtIHKYZ46qFjJsHzznE80hBonPo4s' )
 
 # Routes go here!
 @app.route( '/' )

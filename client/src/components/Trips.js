@@ -1,50 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
 import TripCard from "./TripCard";
 import NewTripForm from "./NewTripForm";
-import httpClient from "./httpClient";
+import { Container } from "@mui/system";
+import { UserContext } from "./UserContext";
 
-const baseUrl = "http://localhost:5555/"
-const tripUrl = baseUrl + "/trips"
-
-function Trips() {
-
-    const [ trips, setTrips ] = useState( [] )
-
-    useEffect( () => {
-        fetchTrips();
-    }, [] );
+function Trips({ trips }) {
     
-    const fetchTrips = async () => {
-        try {
-            const response = await axios.get( "/trips" );
-            setTrips( response.data );
-            console.log( response.data )
-        } catch( error ) {
-            console.error( "Error fetching trips:", error );
-        }
-    };
+    const { user } = useContext( UserContext )
 
+    const userTrips = trips.filter( trip => user.trips. );
+    console.log( userTrips )
+
+    // const userTrips = trips.filter( trip => trip.user.id === user.id ); 
+    // console.log( userTrips )
+
+    const renderTrips = trips.map( trip => 
+        <TripCard 
+            id={ trip.id }
+            trip={ trip }
+        />
+        )
 
     return(
-        <div>
-            <NewTripForm />
-            <TripCard />
-        </div>
+    <Container maxWidth="sm"> 
+        <NewTripForm />
+        { renderTrips }
+    </Container>
     )
 }
 
 export default Trips;
-
-// useEffect( () => {
-//     ( async () => {
-//         try {
-//             const response = await httpClient.get( `//localhost:5555/trips` )
-//             console.log("Response:", response);
-//             setTrips( response.data )
-//             console.log( response.data )
-//         }
-//         catch ( error ) {
-//             console.log( "Not authenticated" )
-//         }
-//     } ) ()
-//   }, [] )
