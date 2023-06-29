@@ -36,7 +36,7 @@ const defaultTheme = createTheme();
 
 function Login() {
 
-  const { user, setUser } = useContext( UserContext )
+  const { setUser } = useContext( UserContext )
 
   const [ email, setEmail ] = useState( "" )
   const [ username, setUsername ] = useState( "" )

@@ -10,20 +10,25 @@ const useStyles = makeStyles({
         justifyContent: "center",
         textAlign: "center",
         padding: "20px",
+        cursor: "pointer",
     },
     media: {
         height: "200px",
     },
 })
 
-function DestinationCard({ d, destinations }) {
+function DestinationCard({ id, destination, addDestinationToTrip, selectTrip  }) {
 
-    let { name, description, image } = d
+    let { name, description, image } = destination
 
     const classes = useStyles()
 
+    const clickAddDestination = () => {
+        addDestinationToTrip( id )
+    }
+
     return(
-        <Card className={ classes.card }>
+        <Card className={ classes.card } onClick={ clickAddDestination }>
             <CardMedia 
                 className={ classes.media }
                 component="img"

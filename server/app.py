@@ -145,6 +145,8 @@ class UsersByID( Resource ):
                 user.first_name = userData[ 'first_name' ]
             if 'last_name' in userData:
                 user.last_name = userData[ 'last_name' ]
+            if 'trips' in userData:
+                user.trips = userData[ 'trips' ]
         
             db.session.commit()
 
@@ -241,6 +243,13 @@ class TripsByID( Resource ):
                 trip.budget = tripData[ 'budget' ]
             if 'notes' in tripData:
                 trip.notes = tripData[ 'notes' ]
+            if 'destinations' in tripData:
+                destinations  = tripData[ 'destinations' ]
+                trip.destinations.extend( destinations )
+            if 'itineraries' in tripData:
+                trip.itineraries = tripData[ 'itineraries' ]
+            if 'activities' in tripData:
+                trip.activities = tripData[ 'activities' ]
         
             db.session.commit()
 
