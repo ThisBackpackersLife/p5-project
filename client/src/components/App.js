@@ -123,6 +123,10 @@ function App() {
     setFormVisibility( !formVisibility );
   }
 
+  const submitNewTripForm = event => {
+    event.preventDefault()
+  }
+
   return (
       <div>
         <UserContext.Provider value={ value }>
@@ -136,7 +140,7 @@ function App() {
               <Route path='/login' exact component={ Login } />
               <Route path='/signup' exact component={ SignUp } />
               <Route path='/destinations' exact render={ () => <Destinations destinations={ destinations } addDestinationToTrip={ addDestinationToTrip } selectTrip={ selectTrip } /> } />
-              <Route path="/trips" exact render={ () => <Trips selectTripId={ selectTripId } isFormVisible={ formVisibility } toggleFormVisibility={ toggleFormVisibility } /> } />
+              <Route path="/trips" exact render={ () => <Trips selectTripId={ selectTripId } isFormVisible={ formVisibility } toggleFormVisibility={ toggleFormVisibility } submitNewTripForm={ submitNewTripForm } /> } />
             </Switch>
         </UserContext.Provider>
       </div>

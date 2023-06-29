@@ -7,17 +7,22 @@ import {
   Typography,
 } from "@mui/material";
 
-function NewTripForm() {
+function NewTripForm({ submitNewTripForm }) {
+
   const [ tripName, setTripName ] = useState( "" )
+  const [ destination, setDestination ] = useState( "" )
   const [ startDate, setStartDate ] = useState( "" )
   const [ endDate, setEndDate ] = useState( "" )
   const [ accommodation, setAccommodation ] = useState( "" )
   const [ budget, setBudget ] = useState( "" )
   const [ notes, setNotes ] = useState( "" )
-  const [ destination, setDestination ] = useState( "" )
 
   const handleTripNameChange = event  => {
     setTripName( event.target.value )
+  }
+
+  const handleDestinationChange = event => {
+    setDestination( event.target.value )
   }
 
   const handleStartDateChange = event => {
@@ -40,10 +45,15 @@ function NewTripForm() {
     setNotes( event.target.value )
   }
 
-  const handleSubmit = event => {
-    event.preventDefault()
-    
-  };
+  const newTrip = {
+    name: tripName,
+    destination: destination,
+    start_date: startDate,
+    end_date: endDate,
+    accommodation: accommodation,
+    budget: budget,
+    notes: notes
+  }
 
   return (
     <Card variant="outlined">
@@ -51,7 +61,7 @@ function NewTripForm() {
         <Typography variant="h5" component="div">
           New Trip
         </Typography>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={ e => submitNewTripForm( e, newTrip ) }>
           <TextField
             label="Trip Name"
             value={tripName}
@@ -59,6 +69,15 @@ function NewTripForm() {
             fullWidth
             required
             margin="normal"
+          />
+          <TextField
+            label="Destination"
+            value={destination}
+            onChange={handleDestinationChange}
+            fullWidth
+            required
+            margin="normal"
+            placeholder="Enter destination (city, country or city, state, country)"
           />
           <TextField
             label="Start Date"

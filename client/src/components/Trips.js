@@ -5,7 +5,7 @@ import NewTripForm from "./NewTripForm";
 import { Container } from "@mui/system";
 import { Grid, Button } from "@mui/material";
 
-function Trips({  selectTripId, isFormVisible, toggleFormVisibility }) {
+function Trips({  selectTripId, isFormVisible, toggleFormVisibility, submitNewTripForm }) {
     
     const { user } = useContext( UserContext )
 
@@ -28,15 +28,15 @@ function Trips({  selectTripId, isFormVisible, toggleFormVisibility }) {
         <Grid container spacing={ 2 }>
             { renderTrips }
         </Grid>
-        {isFormVisible ? (
+        { isFormVisible ? (
         <>
           <Button variant="outlined" onClick={ toggleFormVisibility }>
             Hide Form
           </Button>
-          <NewTripForm />
+          <NewTripForm submitNewTripForm={ submitNewTripForm } />
         </>
       ) : (
-        <Button variant="outlined" onClick={toggleFormVisibility}>
+        <Button variant="outlined" onClick={ toggleFormVisibility }>
           Show New Trip Form
         </Button>
       )}
