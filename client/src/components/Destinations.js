@@ -1,15 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useHistory } from "react-router-dom";
+import { UserContext } from "./UserContext";
+
 // import { Button, ButtonGroup } from "@mui/material";
 import DestinationCard from "./DestinationCard";
 
 
-function Destinations({ destinations }) {
+function Destinations({ destinations, addDestinationToTrip, selectTrip }) {
     
-    const renderDestinations = destinations.map( d => 
+    const renderDestinations = destinations.map( destination => 
         <DestinationCard 
-            id={ d.id}
-            d={ d }
-            destinations={ destinations }
+            key={ destination.id }
+            id={ destination.id}
+            destination={ destination }
+            addDestinationToTrip={ addDestinationToTrip }
+            selectTrip={ selectTrip }
         />
         )
 

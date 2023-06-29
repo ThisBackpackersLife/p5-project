@@ -8,12 +8,10 @@ import httpClient from "./httpClient";
 import SignUp from "./Signup";
 import Destinations from "./Destinations";
 import axios from "axios";
-import UserProvider, { UserContext } from "./UserContext";
-import { useContext } from "react";
+import { UserContext } from "./UserContext";
+import Trips from "./Trips";
 
 function App() {
-
-  // const { user, changeSetUser, userData, changeSetUserData } = useContext( UserContext )
   
   const [ destinations, setDestinations ] = useState( [] )
   const [ trips, setTrips ] = useState( [] )
@@ -21,13 +19,14 @@ function App() {
   const [ isDarkMode, setDarkMode ] = useState( true )  
   const [ user, setUser ] = useState( null )
   const [ userData, setUserData ] = useState( "" )
+  const [ selectTrip, setSelectTrip ] = useState( null )
+  const [ formVisibility, setFormVisibility ] = useState( false );
   
   const value = useMemo( () => ({ user, setUser }), [ user, setUser ])
 
   useEffect( () => {
       ( async () => {
           try {
-            console.log(user)
             const response = await httpClient.get( "//localhost:5555/check_session" )
             setUser( response.data )
           }
@@ -35,7 +34,7 @@ function App() {
             console.log( "Not authenticated" )
           }
       }) ()
-  }, [] )
+  }, [ user ] )
     
     useEffect( () => {
       ( async () => {
@@ -48,14 +47,6 @@ function App() {
           }
       }) ()
   }, [ user ] )
-    
-  // function changeSetUser() {
-  //     setUser( "" )
-  // }
-  
-  // function changeSetUserData() {
-  //     setUserData( "" )
-  // }
 
   const toggleTheme = () => {
     if ( theme === 'light' ) {
@@ -96,13 +87,46 @@ function App() {
     } ) ()
   }, [] )
 
+  const addDestinationToTrip = async ( destinationId ) => {
+    try {
+      const response = await axios.get( `//localhost:5555/destinations/${destinationId}` );
+      const destination = response.data;
+  
+      const updatedTrips = user.trips.map( trip => {
+        if ( trip.id === selectTrip ) {
+          return {
+            ...trip,
+            destinations: [ ...trip.destinations, destination ],
+          }
+        }
+        return trip
+      })
+  
+      const updatedUser = {
+        ...user,
+        trips: updatedTrips,
+      };
+      
+      await axios.patch(`//localhost:5555/users/${ user.id }`, { trips: updatedTrips, } );
+      
+      setUser( updatedUser );
+      
+      console.log(`Destination${ destinationId } added to the trip successfully!`);
+    } catch ( error ) {
+      console.error("Error adding destination to the trip:", error);
+    }
+  }
+
+  const selectTripId = id => setSelectTrip( id )
+
+  const toggleFormVisibility = () => {
+    setFormVisibility( !formVisibility );
+  }
+
   return (
       <div>
         <UserContext.Provider value={ value }>
           <NavBar 
-            // currentUser={ user }
-            // userData={ userData }
-            // changeSetUser={ changeSetUser }
             isDarkMode={ isDarkMode }  
             toggleTheme={ toggleTheme } 
             trips={ trips }
@@ -111,7 +135,8 @@ function App() {
               <Route path='/' exact component={ Home } />
               <Route path='/login' exact component={ Login } />
               <Route path='/signup' exact component={ SignUp } />
-              <Route path='/destinations' exact render={ () => <Destinations destinations={ destinations } /> } />
+              <Route path='/destinations' exact render={ () => <Destinations destinations={ destinations } addDestinationToTrip={ addDestinationToTrip } selectTrip={ selectTrip } /> } />
+              <Route path="/trips" exact render={ () => <Trips selectTripId={ selectTripId } isFormVisible={ formVisibility } toggleFormVisibility={ toggleFormVisibility } /> } />
             </Switch>
         </UserContext.Provider>
       </div>

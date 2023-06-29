@@ -38,6 +38,15 @@ class User( db.Model ):
             "trips": [ trip.t_to_dict() for trip in self.trips ]
         }
     
+    def user_to_dict( self ):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+        }
+    
     @hybrid_property
     def password_hash( self ):
         raise Exception( "Password hashes may not be viewed." )
@@ -173,7 +182,23 @@ class Trip( db.Model ):
             "notes": self.notes,
             "destinations": [ destination.d_to_dict() for destination in self.destinations ],
             "itineraries": [ itinerary.i_to_dict() for itinerary in self.itineraries ],
-            "activities": [ activity.a_to_dict() for activity in self.activities ]
+            "activities": [ activity.a_to_dict() for activity in self.activities ],
+            "users": [ user.u_to_dict() for user in self.users ]
+        }
+    
+    def t_to_dict( self ):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "start_date": self.start_date,
+            "end_date": self.end_date,
+            "accommodation": self.accommodation,
+            "budget": self.budget,
+            "notes": self.notes,
+            "destinations": [ destination.d_to_dict() for destination in self.destinations ],
+            "itineraries": [ itinerary.i_to_dict() for itinerary in self.itineraries ],
+            "activities": [ activity.a_to_dict() for activity in self.activities ],
+            "users": [ user.user_to_dict() for user in self.users ]
         }
     
     @validates( 'name' )

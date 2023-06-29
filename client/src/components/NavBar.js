@@ -3,12 +3,11 @@ import { Link, useHistory } from "react-router-dom";
 import Logo from "../images/Logo.png";
 import UserIcon from "../images/UserIcon.png";
 import httpClient from "./httpClient";
-import Trips from "./Trips";
 import { UserContext } from "./UserContext";
 // import { useContext } from "react";
 
 
-function NavBar({ toggleTheme, isDarkMode, trips }) {
+function NavBar({ toggleTheme, isDarkMode }) {
 
     const { user, setUser } = useContext( UserContext )
     
@@ -47,12 +46,11 @@ function NavBar({ toggleTheme, isDarkMode, trips }) {
                             Destinations
                         </Link>
                     </div>
-                    { user !== null ? (
+                    { user ? (
                         <div className="active user-icon-container">
                             <Link to="/trips" className="link">
                                 <img src={ UserIcon } alt="User Icon"></img>
                             </Link>
-                            <Trips trips={ trips } />
                         </div>
                     ): (
                         <div className="active user-icon-container" >
@@ -61,7 +59,7 @@ function NavBar({ toggleTheme, isDarkMode, trips }) {
                             </Link>
                         </div>
                     )}
-                    { user !== null && ( 
+                    { user && ( 
                         <div className="active user-icon-container">
                         <button onClick={ logout }>Logout</button>
                         </div>

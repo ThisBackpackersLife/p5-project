@@ -1,30 +1,45 @@
 import React, { useContext } from "react";
+import { UserContext } from "./UserContext";
 import TripCard from "./TripCard";
 import NewTripForm from "./NewTripForm";
 import { Container } from "@mui/system";
-import { UserContext } from "./UserContext";
+import { Grid, Button } from "@mui/material";
 
-function Trips({ trips }) {
+function Trips({  selectTripId, isFormVisible, toggleFormVisibility }) {
     
     const { user } = useContext( UserContext )
 
-    const userTrips = trips.filter( trip => user.trips. );
-    console.log( userTrips )
-
-    // const userTrips = trips.filter( trip => trip.user.id === user.id ); 
-    // console.log( userTrips )
-
-    const renderTrips = trips.map( trip => 
+    if ( !user || !user.trips ) {
+        return null
+    }
+    
+    
+    const renderTrips = user.trips.map( trip => 
         <TripCard 
-            id={ trip.id }
-            trip={ trip }
+            key={ trip.id }
+            id={ trip.id } 
+            trip={ trip } 
+            selectTripId={ selectTripId }
         />
-        )
+    )
 
     return(
     <Container maxWidth="sm"> 
-        <NewTripForm />
-        { renderTrips }
+        <Grid container spacing={ 2 }>
+            { renderTrips }
+        </Grid>
+        {isFormVisible ? (
+        <>
+          <Button variant="outlined" onClick={ toggleFormVisibility }>
+            Hide Form
+          </Button>
+          <NewTripForm />
+        </>
+      ) : (
+        <Button variant="outlined" onClick={toggleFormVisibility}>
+          Show New Trip Form
+        </Button>
+      )}
     </Container>
     )
 }
