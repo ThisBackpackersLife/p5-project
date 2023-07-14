@@ -3,7 +3,7 @@
 # Standard library imports
 
 # Remote library imports
-from flask import Flask, make_response, jsonify, request, session
+from flask import Flask, make_response, jsonify, request, session, abort
 from flask_restful import Resource
 
 # Local imports
@@ -128,6 +128,7 @@ class UsersByID( Resource ):
             return { "error": "User not found." }, 404
         
     def patch( self, id ):
+        print(f"Received user ID: {id}")
         user = User.query.filter_by( id=id ).first()
         userData = request.get_json()
 
@@ -146,7 +147,9 @@ class UsersByID( Resource ):
             if 'last_name' in userData:
                 user.last_name = userData[ 'last_name' ]
             if 'trips' in userData:
-                user.trips = userData[ 'trips' ]
+                trip_ids = [ trip.get( 'id' ) for trip in userData[ 'trips' ] if 'id' in trip ]
+                trips = Trip.query.filter( Trip.id.in_( trip_ids )).all()
+                user.user_trips = [ UserTrip( trip=trip ) for trip in trips ]
         
             db.session.commit()
 

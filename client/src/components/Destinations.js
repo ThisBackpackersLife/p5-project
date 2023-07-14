@@ -1,12 +1,9 @@
-import React, { useContext } from "react";
-import { useHistory } from "react-router-dom";
-import { UserContext } from "./UserContext";
-
-// import { Button, ButtonGroup } from "@mui/material";
+import React from "react";
 import DestinationCard from "./DestinationCard";
+import Search from "./Search";
 
 
-function Destinations({ destinations, addDestinationToTrip, selectTrip }) {
+function Destinations({ destinations, addDestinationToTrip, selectTrip, searchDestinations, changeSearchDestinations }) {
     
     const renderDestinations = destinations.map( destination => 
         <DestinationCard 
@@ -20,7 +17,10 @@ function Destinations({ destinations, addDestinationToTrip, selectTrip }) {
 
     return (
         <div id="destination-container">
-            {/* Render the collection of DestinationCards */}
+            <Search 
+                searchDestinations={ searchDestinations } 
+                changeSearchDestinations={ changeSearchDestinations }
+            />
             { renderDestinations }
         </div>
     )

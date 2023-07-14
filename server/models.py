@@ -183,22 +183,7 @@ class Trip( db.Model ):
             "destinations": [ destination.d_to_dict() for destination in self.destinations ],
             "itineraries": [ itinerary.i_to_dict() for itinerary in self.itineraries ],
             "activities": [ activity.a_to_dict() for activity in self.activities ],
-            "users": [ user.u_to_dict() for user in self.users ]
-        }
-    
-    def t_to_dict( self ):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "start_date": self.start_date,
-            "end_date": self.end_date,
-            "accommodation": self.accommodation,
-            "budget": self.budget,
-            "notes": self.notes,
-            "destinations": [ destination.d_to_dict() for destination in self.destinations ],
-            "itineraries": [ itinerary.i_to_dict() for itinerary in self.itineraries ],
-            "activities": [ activity.a_to_dict() for activity in self.activities ],
-            "users": [ user.user_to_dict() for user in self.users ]
+            # "users": [ user.u_to_dict() for user in self.users ]
         }
     
     @validates( 'name' )
@@ -213,14 +198,14 @@ class Trip( db.Model ):
         if isinstance( start_date, str ) and start_date and start_date.count( '-' ) == 2:
             return start_date
         else:
-                abort( 422, "Invalid start date format. Expected:'yyyy-mm-dd'." )
+                abort( 422, "Invalid start date format. Expected:'mm-dd-yyyy'." )
                
     @validates( 'end_date' )
     def validate_end_date( self, key, end_date ):
         if isinstance( end_date, str ) and end_date and end_date.count( '-' ) == 2:
             return end_date
         else:
-                abort( 422, "Invalid end date format. Expected:'yyyy-mm-dd'." )
+                abort( 422, "Invalid end date format. Expected:'mm-dd-yyyy'." )
 
     @validates( 'accommodation' )
     def validate_accommodation( self, key, accommodation ):
@@ -267,12 +252,12 @@ class UserTrip( db.Model ):
             "trip_name": self.trip.name
         }
     
-    @validates( 'user_id' )
-    def validate_user_id( self, key, user_id ):
-        if isinstance( user_id, int ) and user_id > 0 and user_id:
-            return user_id
-        else:
-            abort( 422, "User id must be an instance of User greater than 0." )
+    # @validates( 'user_id' )
+    # def validate_user_id( self, key, user_id ):
+    #     if isinstance( user_id, int ) and user_id > 0 and user_id:
+    #         return user_id
+    #     else:
+    #         abort( 422, "User id must be an instance of User greater than 0." )
 
     @validates( 'trip_id' )
     def validate_trip_id( self, key, trip_id ):
