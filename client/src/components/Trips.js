@@ -36,9 +36,11 @@ function Trips({  selectTripId, isFormVisible, toggleFormVisibility, submitNewTr
           <NewTripForm submitNewTripForm={ submitNewTripForm } />
         </>
       ) : (
-        <Button variant="outlined" onClick={ toggleFormVisibility }>
-          Show New Trip Form
-        </Button>
+        <>
+          <Button variant="outlined" onClick={ toggleFormVisibility }>
+            Show New Trip Form
+          </Button>
+        </>
       )}
     </Container>
     )
