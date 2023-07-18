@@ -126,50 +126,57 @@ function App() {
     setFormVisibility( !formVisibility );
   }
 
-  const submitNewTripForm = async ( event, newTrip ) => {
-    event.preventDefault()
-
-    newTrip.budget = parseInt( newTrip.budget )
-    
-    try {
-      if ( user.id 
-        > 0 ) {
-        const response = await axios.post( "//localhost:5555/trips", { ...newTrip, userId: user.id, })
-        
-        const newTripInstance = { trip: response.data }
-        
-        const updateUserTrips = {
-          ...user, 
-          trips: [ ...user.trips, newTripInstance ]
-        }
-        // delete updateUserTrips.username
-        // delete updateUserTrips.email
-        // // delete updateUserTrips.first_name
-        // // delete updateUserTrips.last_name
-        
-        console.log( user.id )
-        await axios.patch( `//localhost:5555/users/${ user.id }`, { 
-          trips: updateUserTrips.trips, 
+  const submitNewTripForm = ( event, newTrip ) => {
+    event.preventDefault();
+  
+    newTrip.budget = parseInt( newTrip.budget );
+  
+    if ( user.id > 0 ) {
+      axios
+        .post( "//localhost:5555/trips", { ...newTrip, userId: user.id })
+        .then( async ( response ) => {
+          const newTripInstance = { ...response.data }
+  
+          const updateUserTrips = {
+            ...user,
+            trips: [ ...user.trips, newTripInstance ],
+          }
+  
+          const updateTripPromise = axios.patch(
+            `//localhost:5555/users/${ user.id }`,
+            {
+              trips: updateUserTrips.trips,
+            }
+          )
+  
+          const updateUserPromise = axios.patch(
+            `//localhost:5555/trips/${ newTripInstance.id }`,
+            {
+              userId: user.id,
+            }
+          )
+  
+          await Promise.all([ updateTripPromise, updateUserPromise ])
+          return updateUserTrips
         })
-        
-        setUser( updateUserTrips )
-        
-        console.log( "Trip created successfully!", response.data ) 
+        .then( ( updateUserTrips ) => {
+          setUser( updateUserTrips )
+          console.log( "Trip created successfully!" )
+        })
+        .catch( ( error ) => {
+          if ( error.response ) {
+            // Request made and server responded with an error status
+            console.error( "Error creating trip:", error.response.data )
+          } else if ( error.request ) {
+            // The request was made but no response was received
+            console.error( "No response received:", error.request )
+          } else {
+            // Something happened in setting up the request that triggered an error
+            console.error( "Error setting up the request:", error.message )
+          }
+        })
     } else {
       console.error( "Invalid user ID" )
-      return
-    }
-  } catch ( error ) {
-      if ( error.response ) {
-        // Request made and server responded with an error status
-        console.error("Error creating trip:", error.response.data);
-      } else if (error.request) {
-        // The request was made but no response was received
-        console.error("No response received:", error.request);
-      } else {
-        // Something happened in setting up the request that triggered an error
-        console.error("Error setting up the request:", error.message);
-      }
     }
   }
 

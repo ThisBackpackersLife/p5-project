@@ -18,26 +18,28 @@ function TripCard({ trip, selectTripId  }) {
                                     { name }
                                 </Typography>
                                 {/* Display other trip information */}
-                                <Typography>
-                                    Start Date: { start_date }
-                                </Typography>
-                                <Typography>
-                                    End Date: { end_date }
-                                </Typography>
-                                <Typography>
-                                    Accommodation: { accommodation }
-                                </Typography>
-                                <Typography>
-                                    Budget: { budget }
-                                </Typography>
-                                <Typography>
-                                    Notes: { notes }
-                                </Typography>
-                                <Typography>
-                                    Destinations:{ " " }
+                                <div>
+                                    <Typography component="p">
+                                        Start Date: { start_date }
+                                    </Typography>
+                                    <Typography component="p">
+                                        End Date: { end_date }
+                                    </Typography>
+                                    <Typography component="p">
+                                        Accommodation: { accommodation }
+                                    </Typography>
+                                    <Typography component="p">
+                                        Budget: { budget }
+                                    </Typography>
+                                    <Typography component="p">
+                                        Notes: { notes }
+                                    </Typography>
+                                    <Typography component="p">
+                                        Destinations:{ " " }
                                         { destinations && destinations.length > 0 ? (
                                             destinations.map( ( destination ) => (
                                             <Button
+                                                key={ `destination-${destination.id}` }
                                                 component={ Link }
                                                 to={ `/destinations/${ destination.id }` }
                                                 variant="outlined"
@@ -46,49 +48,53 @@ function TripCard({ trip, selectTripId  }) {
                                             </Button>
                                             ))
                                             ) : (
-                                                <Typography>No destinations available.</Typography>
+                                                "No destinations available."
                                             )}
-                                        <Button
-                                            component={Link}
-                                            to="/destinations"
-                                            variant="outlined"
-                                            startIcon={<AddIcon />}
-                                        >
-                                            Add Destination
-                                        </Button>
-                                </Typography>
-                                <Typography>
-                                    Itineraries:{ " " }
-                                    { itineraries && itineraries.length > 0 ? (
-                                        itineraries.map( ( itinerary ) => (
-                                        <Button
-                                            component={ Link }
-                                            to={ `/itineraries/${ itinerary.id }` }
-                                            variant="outlined"
-                                        >
-                                            { itinerary.name }
-                                        </Button>
-                                    ))
-                                    ) : (
-                                        <Typography>No itineraries available.</Typography>
-                                    )}
-                                </Typography>
-                                <Typography>
-                                    Activities:{ " " }
-                                    { activities && activities.length > 0 ? (
-                                        activities.map( ( activity ) => (
-                                        <Button
-                                            component={ Link }
-                                            to={ `/activities/${ activity.id }` }
-                                            variant="outlined"
-                                        >
-                                            { activity.name }
-                                        </Button>
-                                    ))
-                                    ) : (
-                                        <Typography>No activities available.</Typography>
-                                    )}
-                                </Typography>
+                                            <Button
+                                                component={ Link }
+                                                to="/destinations"
+                                                variant="outlined"
+                                                startIcon={ <AddIcon /> }
+                                            >
+                                                Add Destination
+                                            </Button>
+                                    </Typography>
+                                    <Typography component="p">
+                                        Itineraries:{ " " }
+                                        { itineraries && itineraries.length > 0 ? (
+                                            itineraries.map( ( itinerary ) => (
+                                            <Button
+                                                key={ `itinerary-${ itinerary.id }` }
+                                                component={ Link }
+                                                to={ `/itineraries/${ itinerary.id }` }
+                                                variant="outlined"
+                                            >
+                                                { itinerary.name }
+                                            </Button>
+                                        ))
+                                        ) : (
+                                            "No itineraries available."
+                                        )}
+                                    </Typography>
+                                    <Typography component="p">
+                                        Activities:{ " " }
+                                        { activities && activities.length > 0 ? (
+                                            activities.map( ( activity, index ) => (
+                                            <Button
+                                                key={ `activity-${ activity.id }-${ index }` }
+                                                component={ Link }
+                                                to={ `/activities/${ activity.id }` }
+                                                variant="outlined"
+                                            >
+                                                { activity.name }
+                                            </Button>
+                                        ))
+                                        ) : (
+                                            "No activities available."
+                                        )}
+                                    </Typography>
+
+                                </div>
                             </CardContent>
                         </Card>
                     </Grid>
