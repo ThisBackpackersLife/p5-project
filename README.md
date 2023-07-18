@@ -1,5 +1,5 @@
 
-## Introduction
+## ExploreMate
 Db Schema:
 One user can have multiple trips (One-to-Many relationship: User -> Trips).
 One trip can have multiple destinations (Many-to-Many relationship: Trip -> Destinations).
