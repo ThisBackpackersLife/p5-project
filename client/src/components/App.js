@@ -180,6 +180,17 @@ function App() {
     }
   }
 
+  const deleteTrip = ( tripId ) => { 
+    axios
+      .delete( `//localhost:5555/trips/${ tripId }` )
+      .then( ( response ) => {
+        console.log( `Deleted Trip ID:${ tripId }`) 
+      })
+      .catch( ( error ) => {
+        console.error( "Error deleting trip", error )
+      })
+  }
+
   const changeSearchDestinations = e => setSearchDestinations( e.target.value )
 
   const filteredDestinations = destinations.filter( destination => 
@@ -200,7 +211,7 @@ function App() {
               <Route path='/login' exact component={ Login } />
               <Route path='/signup' exact component={ SignUp } />
               <Route path='/destinations' exact render={ () => <Destinations destinations={ filteredDestinations } addDestinationToTrip={ addDestinationToTrip } selectTrip={ selectTrip } searchDestinations={ searchDestinations } changeSearchDestinations={ changeSearchDestinations } /> } />
-              <Route path="/trips" exact render={ () => <Trips selectTripId={ selectTripId } isFormVisible={ formVisibility } toggleFormVisibility={ toggleFormVisibility } submitNewTripForm={ submitNewTripForm } /> } />
+              <Route path="/trips" exact render={ () => <Trips selectTripId={ selectTripId } isFormVisible={ formVisibility } toggleFormVisibility={ toggleFormVisibility } submitNewTripForm={ submitNewTripForm } deleteTrip={ deleteTrip } /> } />
               {/* <Route path="/itineraries/:id" exact component={ ComingSoonPage } /> */}
             </Switch>
         </UserContext.Provider>

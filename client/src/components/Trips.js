@@ -5,7 +5,7 @@ import NewTripForm from "./NewTripForm";
 import { Container } from "@mui/system";
 import { Grid, Button } from "@mui/material";
 
-function Trips({  selectTripId, isFormVisible, toggleFormVisibility, submitNewTripForm }) {
+function Trips({  selectTripId, isFormVisible, toggleFormVisibility, submitNewTripForm, deleteTrip }) {
     
     const { user } = useContext( UserContext )
 
@@ -20,6 +20,7 @@ function Trips({  selectTripId, isFormVisible, toggleFormVisibility, submitNewTr
             id={ trip.id } 
             trip={ trip } 
             selectTripId={ selectTripId }
+            deleteTrip={ deleteTrip }
         />
     )
 
