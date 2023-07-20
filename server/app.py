@@ -128,7 +128,7 @@ class UsersByID( Resource ):
             return { "error": "User not found." }, 404
         
     def patch( self, id ):
-        print(f"Received user ID: {id}")
+        print( f"Received user ID: { id }" )
         user = User.query.filter_by( id=id ).first()
         userData = request.get_json()
 
@@ -168,7 +168,29 @@ class UsersByID( Resource ):
             return { "error": "User not found." }, 404
 
 api.add_resource( UsersByID, '/users/<int:id>', endpoint='users_by_id' )
-       
+
+class DeleteTrip( Resource ):
+    
+    def delete( self, id, trip_id ):
+        print( f"Received userID: { id }, tripID: { trip_id }" )
+        user = User.query.filter_by( id=id ).first()
+
+        if user:
+            trip = Trip.query.filter_by( id=trip_id ).first()
+
+            if trip:
+                user.trips = [ trip for trip in user.trips if trip.id != trip_id ]
+
+                db.session.commit() 
+
+                return make_response( jsonify( user.u_to_dict() ), 200 )
+            else:
+                return { "error": "Trip not found." }, 404
+        else:
+            return { "error": "User not found." }, 404
+    
+api.add_resource( DeleteTrip, '/users/<int:id>/trips/<int:trip_id>', endpoint='delete_trip' )
+
 class Itineraries( Resource ):
 
     def get( self ):

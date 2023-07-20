@@ -181,10 +181,15 @@ function App() {
   }
 
   const deleteTrip = ( tripId ) => { 
+    console.log( tripId )
     axios
-      .delete( `//localhost:5555/trips/${ tripId }` )
+      .delete( `/users/${user.id}/trips/${tripId}` )
       .then( ( response ) => {
-        console.log( `Deleted Trip ID:${ tripId }`) 
+        console.log( `Deleted Trip ID:${ tripId }`, response.data ) 
+
+        const updatedUser = { ...user }
+        updatedUser.trips = updatedUser.trips.filter( trip => trip.id !== tripId )
+        setUser( updatedUser )
       })
       .catch( ( error ) => {
         console.error( "Error deleting trip", error )
