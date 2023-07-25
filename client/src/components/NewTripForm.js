@@ -4,7 +4,6 @@ import { Button, Card, CardContent, TextField, Typography } from "@mui/material"
 function NewTripForm({ submitNewTripForm }) {
 
     const [ tripName, setTripName ] = useState( "" )
-    // const [ destination, setDestination ] = useState( "" )
     const [ startDate, setStartDate ] = useState( "" )
     const [ endDate, setEndDate ] = useState( "" )
     const [ accommodation, setAccommodation ] = useState( "" )
@@ -14,10 +13,6 @@ function NewTripForm({ submitNewTripForm }) {
     const handleTripNameChange = event  => {
         setTripName( event.target.value )
     }
-
-//   const handleDestinationChange = event => {
-//     setDestination( event.target.value )
-//   }
 
     const handleStartDateChange = event => {
         setStartDate( event.target.value )
