@@ -1,13 +1,59 @@
-import React from "react";
-import { Card, CardContent, Grid, Typography, Button } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, Grid, Typography, Button, TextField } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import SaveIcon from "@mui/icons-material/Save";
 import { Link } from "react-router-dom";
 
-function TripCard({ trip, selectTripId, deleteTrip  }) {
+function TripCard({ trip, selectTripId, deleteTrip, editTrip }) {
     
     let { id, name, start_date, end_date, accommodation, budget, notes, destinations, itineraries, activities } = trip
+
+    const [ editMode, setEditMode ] = useState( false )
+    const [ editTripName, setEditTripName ] = useState( "" )
+    const [ editStartDate, setEditStartDate ] = useState( "" )
+    const [ editEndDate, setEditEndDate ] = useState( "" )
+    const [ editAccommodation, setEditAccommodation ] = useState( "" )
+    const [ editBudget, setEditBudget ] = useState( "" )
+    const [ editNotes, setEditNotes ] = useState( "" )
+
+    const handleEditTrip = () => {
+        setEditMode( !editMode )
+    }
+
+    const handleEditName = event  => {
+        setEditTripName( event.target.value )
+    }
+
+    const handleStartDate = event => {
+        setEditStartDate( event.target.value )
+     }
+
+    const handleEndDate = event => {
+        setEditEndDate( event.target.value )
+    }
+
+    const handleEditAccommodation = event => {
+        setEditAccommodation( event.target.value )
+    }
+
+    const handleEditBudget = event => {
+        setEditBudget( event.target.value )
+    }
+
+    const handleEditNotes = event => {
+        setEditNotes( event.target.value )
+    }
+
+    const editTripInfo = {
+        name: editTripName,
+        startDate: editStartDate,
+        endDate: editEndDate,
+        accommodation: editAccommodation,
+        budget: editBudget,
+        notes: editNotes,
+    }
 
     return(
         <>
@@ -20,13 +66,27 @@ function TripCard({ trip, selectTripId, deleteTrip  }) {
                                     <Grid item xs={ 2 } sm={ 10 }>
                                         <div style={{ display: "flex", justifyContent: "space-between" }}>
                                             {/* Edit Trip Button */}
-                                            <Button
-                                                variant="outlined"
-                                                startIcon={ <EditIcon /> }
-                                                onClick={ null }
-                                            >
-                                                Edit Trip
-                                            </Button>
+                                            { !editMode ? (
+                                                <Button
+                                                    variant="outlined"
+                                                    startIcon={ <EditIcon /> }
+                                                    onClick={ handleEditTrip }
+                                                >
+                                                    Edit Trip
+                                                </Button>
+                                            ) : (
+                                                <Button
+                                                    variant="outlined"
+                                                    startIcon={ <SaveIcon /> }
+                                                    onClick={ () => {
+                                                        editTrip( id, editTripInfo )
+                                                        handleEditTrip()
+                                                    }}
+                                                >
+                                                    Save Trip
+                                                </Button>
+                                            )}
+
                                             {/* Delete Trip Button */}
                                             <Button
                                                 variant="outlined"
@@ -38,28 +98,88 @@ function TripCard({ trip, selectTripId, deleteTrip  }) {
                                         </div>
                                     </Grid>
                                     <Grid item xs={ 10 } sm={ 10 }>
-                                        <Typography variant="h5" component="div">
-                                            { name }
-                                        </Typography>
+                                        {/* Display the trip name */}
+                                        { !editMode ? (
+                                            <Typography variant="h5" component="div">
+                                                { name }
+                                            </Typography>
+                                        ) : (
+                                            <TextField 
+                                                label="Trip Name"
+                                                value={ editTripName }
+                                                onChange={ handleEditName }
+                                                fullWidth
+                                            />
+                                        )}
                                     </Grid>
                                 </Grid>
                                 {/* Display other trip information */}
                                 <div>
-                                    <Typography component="p">
-                                        Start Date: { start_date }
-                                    </Typography>
-                                    <Typography component="p">
-                                        End Date: { end_date }
-                                    </Typography>
-                                    <Typography component="p">
-                                        Accommodation: { accommodation }
-                                    </Typography>
-                                    <Typography component="p">
-                                        Budget: { budget }
-                                    </Typography>
-                                    <Typography component="p">
-                                        Notes: { notes }
-                                    </Typography>
+                                    {/* Start Date */}
+                                    { !editMode ? (
+                                        <Typography component="p">
+                                            Start Date: { start_date }
+                                        </Typography>
+                                    ) : (
+                                        <TextField 
+                                            label="Start Date: yyyy-mm-dd"
+                                            value={ editStartDate }
+                                            onChange={ handleStartDate }
+                                            fullWidth
+                                        />
+                                    )}
+                                    {/* End Date */}
+                                    { !editMode ? (
+                                        <Typography component="p">
+                                            End Date: { end_date }
+                                        </Typography>
+                                    ) : (
+                                        <TextField
+                                          label="End Date: yyyy-mm-dd"
+                                          value={ editEndDate }
+                                          onChange={ handleEndDate }
+                                          fullWidth
+                                        />
+                                    )}
+                                    {/* Accommodation */}
+                                    { !editMode ? (
+                                        <Typography component="p">
+                                            Accommodation: { accommodation }
+                                        </Typography>
+                                    ) : (
+                                        <TextField
+                                          label="Accommodation"
+                                          value={ editAccommodation }
+                                          onChange={ handleEditAccommodation }
+                                          fullWidth
+                                        />
+                                    )}
+                                    {/* Budget */}
+                                    { !editMode ? (
+                                        <Typography component="p">
+                                            Budget: { budget }
+                                        </Typography>
+                                    ) : (
+                                        <TextField
+                                          label="Budget"
+                                          value={ editBudget }
+                                          onChange={ handleEditBudget }
+                                          fullWidth
+                                        />
+                                    )}
+                                    {/* Notes */}
+                                    { !editMode ? (
+                                        <Typography component="p">
+                                            Notes: { notes }
+                                        </Typography>
+                                    ) : (
+                                        <TextField
+                                          label="Notes"
+                                          value={ editNotes }
+                                          onChange={ handleEditNotes }
+                                          fullWidth
+                                        />
+                                    )}
                                     {/* Destination links */}
                                     <Typography component="p">
                                         Destinations:{ " " }

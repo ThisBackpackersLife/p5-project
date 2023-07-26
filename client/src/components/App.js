@@ -127,9 +127,9 @@ function App() {
   }
 
   const submitNewTripForm = ( event, newTrip ) => {
-    event.preventDefault();
+    event.preventDefault()
   
-    newTrip.budget = parseInt( newTrip.budget );
+    newTrip.budget = parseInt( newTrip.budget )
   
     if ( user.id > 0 ) {
       axios
@@ -181,9 +181,9 @@ function App() {
   }
 
   const deleteTrip = ( tripId ) => { 
-    console.log( tripId )
+
     axios
-      .delete( `/users/${user.id}/trips/${tripId}` )
+      .delete( `/users/${ user.id }/trips/${ tripId }` )
       .then( ( response ) => {
         console.log( `Deleted Trip ID:${ tripId }`, response.data ) 
 
@@ -194,6 +194,41 @@ function App() {
       .catch( ( error ) => {
         console.error( "Error deleting trip", error )
       })
+  }
+
+  const editTrip = async ( tripId, editTripInfo ) => {
+    try {
+
+      // Create a partial editTripInfo object with only the filled-in fields
+      const partialEditTripInfo = {}
+
+      if( editTripInfo.name !== '') partialEditTripInfo.name = editTripInfo.name 
+      if( editTripInfo.startDate !== '') partialEditTripInfo.start_date = editTripInfo.startDate
+      if( editTripInfo.endDate !== '' ) partialEditTripInfo.end_date = editTripInfo.endDate
+      if( editTripInfo.accommodation !== '' ) partialEditTripInfo.accommodation = editTripInfo.accommodation
+      // Only include the budget field if it's greater than 0 or if it's provided by the user
+      if( editTripInfo.budget !== '' && parseInt( editTripInfo.budget) > 0 ) { partialEditTripInfo.budget = parseInt( editTripInfo.budget )}
+      if( editTripInfo.notes !== '' ) partialEditTripInfo.notes = editTripInfo.notes
+
+      // Patch request to update the trip
+      const tripResponse = await axios.patch( `//localhost:5555/trips/${ tripId }`, partialEditTripInfo )
+      const updatedTrip = tripResponse.data
+
+      // Update user.trips information
+      const updatedUserTrips = user.trips.map( (trip) => trip.id === tripId ? { ...trip, ...updatedTrip } : trip )
+
+      // Patch request to update the user's trips
+      const userResponse = await axios.patch( `//localhost:5555/users/${ user.id }`, {
+        trips: updatedUserTrips,
+      })
+      const updatedUser = userResponse.data
+
+      // Update the user state with the new trips information
+      setUser( updatedUser => ({ ...updatedUser, trips: updatedUserTrips }) )
+    
+    } catch( error ) {
+      console.error( "Error updating trips:", error.response )
+    }
   }
 
   const changeSearchDestinations = e => setSearchDestinations( e.target.value )
@@ -216,7 +251,7 @@ function App() {
               <Route path='/login' exact component={ Login } />
               <Route path='/signup' exact component={ SignUp } />
               <Route path='/destinations' exact render={ () => <Destinations destinations={ filteredDestinations } addDestinationToTrip={ addDestinationToTrip } selectTrip={ selectTrip } searchDestinations={ searchDestinations } changeSearchDestinations={ changeSearchDestinations } /> } />
-              <Route path="/trips" exact render={ () => <Trips selectTripId={ selectTripId } isFormVisible={ formVisibility } toggleFormVisibility={ toggleFormVisibility } submitNewTripForm={ submitNewTripForm } deleteTrip={ deleteTrip } /> } />
+              <Route path="/trips" exact render={ () => <Trips selectTripId={ selectTripId } isFormVisible={ formVisibility } toggleFormVisibility={ toggleFormVisibility } submitNewTripForm={ submitNewTripForm } deleteTrip={ deleteTrip } editTrip={ editTrip } /> } />
               {/* <Route path="/itineraries/:id" exact component={ ComingSoonPage } /> */}
             </Switch>
         </UserContext.Provider>
