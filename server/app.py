@@ -249,8 +249,10 @@ class TripsByID( Resource ):
             return { "error": "Trip not found." }, 404
 
     def patch( self, id ):
+        print( f"Received trip ID: { id }" )
         trip = Trip.query.filter_by( id=id ).first()
         tripData = request.get_json()
+        print( trip.start_date )
 
         if not tripData:
             return { "error": "Data required to make a change." }
