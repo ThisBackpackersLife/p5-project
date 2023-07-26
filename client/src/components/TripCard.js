@@ -48,8 +48,8 @@ function TripCard({ trip, selectTripId, deleteTrip, editTrip }) {
 
     const editTripInfo = {
         name: editTripName,
-        start_date: editStartDate,
-        end_date: editEndDate,
+        startDate: editStartDate,
+        endDate: editEndDate,
         accommodation: editAccommodation,
         budget: editBudget,
         notes: editNotes,

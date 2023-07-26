@@ -203,11 +203,11 @@ function App() {
       const partialEditTripInfo = {}
 
       if( editTripInfo.name !== '') partialEditTripInfo.name = editTripInfo.name 
-      if( editTripInfo.startDate !== '') partialEditTripInfo.startDate = editTripInfo.startDate
-      if( editTripInfo.endDate !== '' ) partialEditTripInfo.endDate = editTripInfo.endDate
+      if( editTripInfo.startDate !== '') partialEditTripInfo.start_date = editTripInfo.startDate
+      if( editTripInfo.endDate !== '' ) partialEditTripInfo.end_date = editTripInfo.endDate
       if( editTripInfo.accommodation !== '' ) partialEditTripInfo.accommodation = editTripInfo.accommodation
       // Only include the budget field if it's greater than 0 or if it's provided by the user
-      if( editTripInfo.budget !== '' && parseInt( editTripInfo.budget) > 0 ) { partialEditTripInfo.budget = editTripInfo.budget }
+      if( editTripInfo.budget !== '' && parseInt( editTripInfo.budget) > 0 ) { partialEditTripInfo.budget = parseInt( editTripInfo.budget )}
       if( editTripInfo.notes !== '' ) partialEditTripInfo.notes = editTripInfo.notes
 
       // Patch request to update the trip
