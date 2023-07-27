@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Button, Card, CardContent, TextField, Typography } from "@mui/material";
 
 function NewTripForm({ submitNewTripForm }) {
@@ -9,6 +9,8 @@ function NewTripForm({ submitNewTripForm }) {
     const [ accommodation, setAccommodation ] = useState( "" )
     const [ budget, setBudget ] = useState( "" )
     const [ notes, setNotes ] = useState( "" )
+
+    const formRef = useRef( null )
 
     const handleTripNameChange = event  => {
         setTripName( event.target.value )
@@ -43,13 +45,22 @@ function NewTripForm({ submitNewTripForm }) {
         notes: notes,
     }
 
+    const eventHandlers = {
+        handleTripNameChange,
+        handleStartDateChange,
+        handleEndDateChange,
+        handleAccommodationChange,
+        handleBudgetChange,
+        handleNotesChange,
+    }
+
     return (
         <Card variant="outlined">
             <CardContent>
                 <Typography variant="h5" component="div">
                 New Trip
                 </Typography>
-                <form onSubmit={ e => submitNewTripForm( e, newTrip ) }>
+                <form ref={ formRef } onSubmit={ event => submitNewTripForm( event, newTrip, formRef, eventHandlers ) }>
                 <TextField
                     label="Trip Name"
                     value={ tripName }

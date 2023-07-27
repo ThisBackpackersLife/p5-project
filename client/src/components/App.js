@@ -126,7 +126,8 @@ function App() {
     setFormVisibility( !formVisibility );
   }
 
-  const submitNewTripForm = ( event, newTrip ) => {
+  const submitNewTripForm = ( event, newTrip, formRef, eventHandlers ) => {
+    console.log( formRef, eventHandlers )
     event.preventDefault()
   
     newTrip.budget = parseInt( newTrip.budget )
@@ -162,6 +163,18 @@ function App() {
         .then( ( updateUserTrips ) => {
           setUser( updateUserTrips )
           console.log( "Trip created successfully!" )
+
+          // Reset the form fields after successful trip creation
+          formRef.current.reset()
+
+          // Call the event handlers to clear the state variables in NewTripForm component
+          console.log( eventHandlers.handleTripNameChange, eventHandlers.handleStartDateChange, eventHandlers.handleEndDateChange, eventHandlers.handleAccommodationChange, eventHandlers.budget, eventHandlers.notes )
+          eventHandlers.handleTripNameChange( "" )
+          eventHandlers.handleStartDateChange( "" )
+          eventHandlers.handleEndDateChange( "" )
+          eventHandlers.handleAccommodationChange( "" )
+          eventHandlers.handleBudgetChange( "" )
+          eventHandlers.handleNotesChange( "" )
         })
         .catch( ( error ) => {
           if ( error.response ) {
@@ -185,7 +198,7 @@ function App() {
     axios
       .delete( `/users/${ user.id }/trips/${ tripId }` )
       .then( ( response ) => {
-        console.log( `Deleted Trip ID:${ tripId }`, response.data ) 
+        // console.log( `Deleted Trip ID:${ tripId }`, response.data ) 
 
         const updatedUser = { ...user }
         updatedUser.trips = updatedUser.trips.filter( trip => trip.id !== tripId )
@@ -198,6 +211,8 @@ function App() {
 
   const editTrip = async ( tripId, editTripInfo ) => {
     try {
+      // Turn the budget string into an integer
+      editTripInfo.budget = parseInt( editTripInfo.budget )
 
       // Create a partial editTripInfo object with only the filled-in fields
       const partialEditTripInfo = {}
@@ -207,7 +222,7 @@ function App() {
       if( editTripInfo.endDate !== '' ) partialEditTripInfo.end_date = editTripInfo.endDate
       if( editTripInfo.accommodation !== '' ) partialEditTripInfo.accommodation = editTripInfo.accommodation
       // Only include the budget field if it's greater than 0 or if it's provided by the user
-      if( editTripInfo.budget !== '' && parseInt( editTripInfo.budget) > 0 ) { partialEditTripInfo.budget = parseInt( editTripInfo.budget )}
+      if( editTripInfo.budget !== '' && editTripInfo.budget > 0 ) { partialEditTripInfo.budget = editTripInfo.budget }
       if( editTripInfo.notes !== '' ) partialEditTripInfo.notes = editTripInfo.notes
 
       // Patch request to update the trip
