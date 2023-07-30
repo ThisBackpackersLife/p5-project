@@ -252,7 +252,6 @@ class TripsByID( Resource ):
         print( f"Received trip ID: { id }" )
         trip = Trip.query.filter_by( id=id ).first()
         tripData = request.get_json()
-        print( trip.start_date )
 
         if not tripData:
             return { "error": "Data required to make a change." }
@@ -271,8 +270,9 @@ class TripsByID( Resource ):
             if 'notes' in tripData:
                 trip.notes = tripData[ 'notes' ]
             if 'destinations' in tripData:
-                destinations  = tripData[ 'destinations' ]
-                trip.destinations.extend( destinations )
+                destinations  = tripData[ 'destinations' ]                
+                trip.destinations = [ Destination.query.get( destination[ 'id' ]) for destination in destinations ]
+                print( trip.destinations )
             if 'itineraries' in tripData:
                 trip.itineraries = tripData[ 'itineraries' ]
             if 'activities' in tripData:

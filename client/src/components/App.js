@@ -91,28 +91,40 @@ function App() {
 
   const addDestinationToTrip = async ( destinationId ) => {
     try {
-      const response = await axios.get( `//localhost:5555/destinations/${ destinationId }` );
-      const destination = response.data;
-  
-      const updatedTrips = user.trips.map( trip => {
-        if ( trip.id === selectTrip ) {
-          return {
-            ...trip,
-            destinations: [ ...trip.destinations, destination ],
-          }
-        }
-        return trip
-      })
-  
+      // Fetch destination from server
+      const destinationResponse = await axios.get( `//localhost:5555/destinations/${ destinationId }` )
+      const destination = destinationResponse.data
+      // console.log( destination )
+
+      // Fetch trip from server
+      const tripResponse = await axios.get( `//localhost:5555/trips/${ selectTrip }` )
+      const trip = tripResponse.data
+      // console.log( trip )
+
+      // Add destination to trip
+      const updatedDestinations = [ ...trip.destinations, destination ]
+      console.log( updatedDestinations )
+
+      // Patch updated trip with new destinations array
+      const updatedTripResponse = await axios.patch( `//localhost:5555/trips/${ selectTrip }`, { destinations: updatedDestinations } )
+      const updatedTrip = updatedTripResponse.data 
+      console.log( updatedTrip )
+
+      // Update user's trips with updated trip
+      const updatedTrips = user.trips.map( trip => trip.id === selectTrip ? updatedTrip : trip )
+
+      // Create updated user object with new trips array  
       const updatedUser = {
         ...user,
         trips: updatedTrips,
       }
       console.log( updatedUser )
       
-      await axios.patch(`//localhost:5555/users/${ user.id }`, { trips: updatedTrips, } )
-      
-      setUser( updatedUser );
+      // Patch the updated user object to the server
+      await axios.patch( `//localhost:5555/users/${ user.id }`, { trips: updatedTrips } )
+
+      // Set the state with the updated user      
+      setUser( updatedUser )
       
       console.log(`Destination${ destinationId } added to the trip successfully!`)
     } catch ( error ) {
