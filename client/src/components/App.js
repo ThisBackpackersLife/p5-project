@@ -91,28 +91,36 @@ function App() {
 
   const addDestinationToTrip = async ( destinationId ) => {
     try {
-      const response = await axios.get( `//localhost:5555/destinations/${ destinationId }` );
-      const destination = response.data;
-  
-      const updatedTrips = user.trips.map( trip => {
-        if ( trip.id === selectTrip ) {
-          return {
-            ...trip,
-            destinations: [ ...trip.destinations, destination ],
-          }
-        }
-        return trip
-      })
-  
+      // Fetch destination from server
+      const destinationResponse = await axios.get( `//localhost:5555/destinations/${ destinationId }` )
+      const destination = destinationResponse.data
+
+      // Fetch trip from server
+      const tripResponse = await axios.get( `//localhost:5555/trips/${ selectTrip }` )
+      const trip = tripResponse.data
+
+      // Add destination to trip
+      const updatedDestinations = [ ...trip.destinations, destination ]
+
+      // Patch updated trip with new destinations array
+      const updatedTripResponse = await axios.patch( `//localhost:5555/trips/${ selectTrip }`, { destinations: updatedDestinations } )
+      const updatedTrip = updatedTripResponse.data 
+
+      // Update user's trips with updated trip
+      const updatedTrips = user.trips.map( trip => trip.id === selectTrip ? updatedTrip : trip )
+
+      // Create updated user object with new trips array  
       const updatedUser = {
         ...user,
         trips: updatedTrips,
       }
       console.log( updatedUser )
       
-      await axios.patch(`//localhost:5555/users/${ user.id }`, { trips: updatedTrips, } )
-      
-      setUser( updatedUser );
+      // Patch the updated user object to the server
+      await axios.patch( `//localhost:5555/users/${ user.id }`, { trips: updatedTrips } )
+
+      // Set the state with the updated user      
+      setUser( updatedUser )
       
       console.log(`Destination${ destinationId } added to the trip successfully!`)
     } catch ( error ) {
@@ -126,7 +134,8 @@ function App() {
     setFormVisibility( !formVisibility );
   }
 
-  const submitNewTripForm = ( event, newTrip ) => {
+  const submitNewTripForm = ( event, newTrip, formRef, eventHandlers ) => {
+    console.log( formRef, eventHandlers )
     event.preventDefault()
   
     newTrip.budget = parseInt( newTrip.budget )
@@ -162,6 +171,18 @@ function App() {
         .then( ( updateUserTrips ) => {
           setUser( updateUserTrips )
           console.log( "Trip created successfully!" )
+
+          // Reset the form fields after successful trip creation
+          formRef.current.reset()
+
+          // Call the event handlers to clear the state variables in NewTripForm component
+          console.log( eventHandlers.handleTripNameChange, eventHandlers.handleStartDateChange, eventHandlers.handleEndDateChange, eventHandlers.handleAccommodationChange, eventHandlers.budget, eventHandlers.notes )
+          eventHandlers.handleTripNameChange( "" )
+          eventHandlers.handleStartDateChange( "" )
+          eventHandlers.handleEndDateChange( "" )
+          eventHandlers.handleAccommodationChange( "" )
+          eventHandlers.handleBudgetChange( "" )
+          eventHandlers.handleNotesChange( "" )
         })
         .catch( ( error ) => {
           if ( error.response ) {
@@ -185,7 +206,7 @@ function App() {
     axios
       .delete( `/users/${ user.id }/trips/${ tripId }` )
       .then( ( response ) => {
-        console.log( `Deleted Trip ID:${ tripId }`, response.data ) 
+        // console.log( `Deleted Trip ID:${ tripId }`, response.data ) 
 
         const updatedUser = { ...user }
         updatedUser.trips = updatedUser.trips.filter( trip => trip.id !== tripId )
@@ -198,6 +219,8 @@ function App() {
 
   const editTrip = async ( tripId, editTripInfo ) => {
     try {
+      // Turn the budget string into an integer
+      editTripInfo.budget = parseInt( editTripInfo.budget )
 
       // Create a partial editTripInfo object with only the filled-in fields
       const partialEditTripInfo = {}
@@ -207,7 +230,7 @@ function App() {
       if( editTripInfo.endDate !== '' ) partialEditTripInfo.end_date = editTripInfo.endDate
       if( editTripInfo.accommodation !== '' ) partialEditTripInfo.accommodation = editTripInfo.accommodation
       // Only include the budget field if it's greater than 0 or if it's provided by the user
-      if( editTripInfo.budget !== '' && parseInt( editTripInfo.budget) > 0 ) { partialEditTripInfo.budget = parseInt( editTripInfo.budget )}
+      if( editTripInfo.budget !== '' && editTripInfo.budget > 0 ) { partialEditTripInfo.budget = editTripInfo.budget }
       if( editTripInfo.notes !== '' ) partialEditTripInfo.notes = editTripInfo.notes
 
       // Patch request to update the trip
