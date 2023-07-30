@@ -94,21 +94,17 @@ function App() {
       // Fetch destination from server
       const destinationResponse = await axios.get( `//localhost:5555/destinations/${ destinationId }` )
       const destination = destinationResponse.data
-      // console.log( destination )
 
       // Fetch trip from server
       const tripResponse = await axios.get( `//localhost:5555/trips/${ selectTrip }` )
       const trip = tripResponse.data
-      // console.log( trip )
 
       // Add destination to trip
       const updatedDestinations = [ ...trip.destinations, destination ]
-      console.log( updatedDestinations )
 
       // Patch updated trip with new destinations array
       const updatedTripResponse = await axios.patch( `//localhost:5555/trips/${ selectTrip }`, { destinations: updatedDestinations } )
       const updatedTrip = updatedTripResponse.data 
-      console.log( updatedTrip )
 
       // Update user's trips with updated trip
       const updatedTrips = user.trips.map( trip => trip.id === selectTrip ? updatedTrip : trip )
