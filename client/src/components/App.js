@@ -260,6 +260,7 @@ function App() {
     destination.name.toLowerCase().includes( searchDestinations.toLowerCase() ) 
   )
 
+  
 
   return (
       <div>

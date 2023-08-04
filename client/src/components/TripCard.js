@@ -6,7 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
 import { Link } from "react-router-dom";
 
-function TripCard({ trip, selectTripId, deleteTrip, editTrip }) {
+function TripCard({ trip, selectTripId, deleteTrip, editTrip, removeDestination }) {
     
     let { id, name, start_date, end_date, accommodation, budget, notes, destinations, itineraries, activities } = trip
 
@@ -17,34 +17,21 @@ function TripCard({ trip, selectTripId, deleteTrip, editTrip }) {
     const [ editAccommodation, setEditAccommodation ] = useState( "" )
     const [ editBudget, setEditBudget ] = useState( "" )
     const [ editNotes, setEditNotes ] = useState( "" )
+    const [ destinationHover, setDestinationHover ] = useState( false )
 
-    const handleEditTrip = () => {
-        setEditMode( !editMode )
-    }
+    const handleEditTrip = () => setEditMode( !editMode )
 
-    const handleEditName = event  => {
-        setEditTripName( event.target.value )
-    }
+    const handleEditName = event  => setEditTripName( event.target.value )
 
-    const handleStartDate = event => {
-        setEditStartDate( event.target.value )
-     }
+    const handleStartDate = event => setEditStartDate( event.target.value )
 
-    const handleEndDate = event => {
-        setEditEndDate( event.target.value )
-    }
+    const handleEndDate = event => setEditEndDate( event.target.value )
 
-    const handleEditAccommodation = event => {
-        setEditAccommodation( event.target.value )
-    }
+    const handleEditAccommodation = event => setEditAccommodation( event.target.value )
 
-    const handleEditBudget = event => {
-        setEditBudget( event.target.value )
-    }
+    const handleEditBudget = event => setEditBudget( event.target.value )
 
-    const handleEditNotes = event => {
-        setEditNotes( event.target.value )
-    }
+    const handleEditNotes = event => setEditNotes( event.target.value )
 
     const editTripInfo = {
         name: editTripName,
@@ -54,6 +41,9 @@ function TripCard({ trip, selectTripId, deleteTrip, editTrip }) {
         budget: editBudget,
         notes: editNotes,
     }
+
+    const handleDestinationEnter = () => setDestinationHover( true )
+    const handleDestinationLeave = () => setDestinationHover( false )
 
     return(
         <>
@@ -184,14 +174,24 @@ function TripCard({ trip, selectTripId, deleteTrip, editTrip }) {
                                     <Typography component="p">
                                         Destinations:{ " " }
                                         { destinations && destinations.length > 0 ? (
-                                            destinations.map( ( destination ) => (
+                                            destinations.map( destination => (
                                             <Button
-                                                key={ `destination-${destination.id}` }
+                                                key={ `destination-${ destination.id }` }
                                                 component={ Link }
                                                 to={ `/destinations/${ destination.id }` }
                                                 variant="outlined"
+                                                onMouseEnter={ handleDestinationEnter }
+                                                onMouseLeave={ handleDestinationLeave }
                                             >
                                                 { destination.name }
+                                                { destinationHover && (
+                                                    <Button
+                                                        variant="outlined"
+                                                        startIcon={ <DeleteIcon /> }
+                                                        onClick={ () => removeDestination( destination.id ) }
+                                                    >
+                                                    </Button>
+                                                )}
                                             </Button>
                                             ))
                                             ) : (
