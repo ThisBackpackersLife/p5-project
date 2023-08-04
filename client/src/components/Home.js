@@ -17,7 +17,7 @@ function Home() {
                 </div>
                 <div className="feature-box">
                     <h2 className="feature-heading">Activities</h2>
-                    <p className="feature-description">Search through different activities in different locations.</p>
+                    <p className="feature-description">Search new activities in different locations.</p>
                 </div>
             </section>
         </div>
