@@ -301,6 +301,35 @@ class TripsByID( Resource ):
 
 api.add_resource( TripsByID, '/trips/<int:id>', endpoint='trips_by_id' )
 
+class RemoveTripDestination( Resource ):
+
+    def patch( self, id, destination_id ):
+        print( f"Received trip ID: { id }" )
+        trip = Trip.query.filter_by( id=id ).first()
+        tripData = request.get_json()
+
+        if not tripData:
+            return { "error": "Data required to make a change." }
+
+        if trip:
+            if 'destinations' in tripData:
+                destinations = tripData[ 'destinations' ]
+                for destination in destinations:
+                    if 'id' in destination:
+                        destination_id = destination[ 'id' ]
+                    destination_obj = db.session.get( Destination, destination_id )
+                    print( destination_obj )
+                    if destination_obj in trip.destinations:
+                        trip.destinations.remove( destination_obj )
+                        db.session.commit()
+                        return make_response( jsonify( trip.t_to_dict()), 200 )
+                    else:
+                        return { "error": "Destination not found in the trip" }, 404
+            else:
+                return { "error": "Trip not found." }, 404
+            
+api.add_resource(RemoveTripDestination, '/trips/<int:id>/destinations/<int:destination_id>', endpoint='remove_destination')
+
 class UserTrips( Resource ):
     
     def get( self ):
