@@ -260,8 +260,43 @@ function App() {
     destination.name.toLowerCase().includes( searchDestinations.toLowerCase() ) 
   )
 
-  
+  const removeDestinationFromTrip = async ( destinationId ) => { 
+    try {
+      console.log( `Remove: ${ destinationId }` )
 
+      // Fetch trip from server
+      const tripResponse = await axios.get( `//localhost:5555/trips/${ selectTrip }` )
+      const trip = tripResponse.data
+
+      // Remove destination from trip
+      const updatedDestinations = trip.destinations.filter( dest => dest.id !== destinationId )
+
+      // Patch updated trip with new destinations array
+      const updatedTripResponse = await axios.patch( `//localhost:5555/trips/${ selectTrip }/destinations/${ destinationId }`, { destinations: updatedDestinations } )
+      const updatedTrip = updatedTripResponse.data 
+
+      // Update user's trips with updated trip
+      const updatedTrips = user.trips.map( trip => trip.id === selectTrip ? updatedTrip : trip )
+
+      // Create updated user object with new trips array  
+      const updatedUser = {
+        ...user,
+        trips: updatedTrips,
+      }
+      console.log( updatedUser )
+      
+      // Patch the updated user object to the server
+      await axios.patch( `//localhost:5555/users/${ user.id }`, { trips: updatedTrips } )
+
+      // Set the state with the updated user      
+      setUser( updatedUser )
+      
+      console.log(`Destination${ destinationId } removed from the trip successfully!`)
+    } catch ( error ) {
+      console.error("Error removing destination from the trip:", error)
+    }
+  }
+  
   return (
       <div>
         <UserContext.Provider value={ value }>
@@ -275,7 +310,7 @@ function App() {
               <Route path='/login' exact component={ Login } />
               <Route path='/signup' exact component={ SignUp } />
               <Route path='/destinations' exact render={ () => <Destinations destinations={ filteredDestinations } addDestinationToTrip={ addDestinationToTrip } selectTrip={ selectTrip } searchDestinations={ searchDestinations } changeSearchDestinations={ changeSearchDestinations } /> } />
-              <Route path="/trips" exact render={ () => <Trips selectTripId={ selectTripId } isFormVisible={ formVisibility } toggleFormVisibility={ toggleFormVisibility } submitNewTripForm={ submitNewTripForm } deleteTrip={ deleteTrip } editTrip={ editTrip } /> } />
+              <Route path="/trips" exact render={ () => <Trips selectTripId={ selectTripId } isFormVisible={ formVisibility } toggleFormVisibility={ toggleFormVisibility } submitNewTripForm={ submitNewTripForm } deleteTrip={ deleteTrip } editTrip={ editTrip } removeDestination={ removeDestinationFromTrip }/> } />
               {/* <Route path="/itineraries/:id" exact component={ ComingSoonPage } /> */}
             </Switch>
         </UserContext.Provider>
