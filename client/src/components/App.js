@@ -274,6 +274,7 @@ function App() {
       // Patch updated trip with new destinations array
       const updatedTripResponse = await axios.patch( `//localhost:5555/trips/${ selectTrip }/destinations/${ destinationId }`, { destinations: updatedDestinations } )
       const updatedTrip = updatedTripResponse.data 
+      console.log( updatedTripResponse )
 
       // Update user's trips with updated trip
       const updatedTrips = user.trips.map( trip => trip.id === selectTrip ? updatedTrip : trip )
