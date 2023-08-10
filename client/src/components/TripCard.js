@@ -177,8 +177,8 @@ function TripCard({ trip, selectTripId, deleteTrip, editTrip, removeDestination 
                                             destinations.map( destination => (
                                             <Button
                                                 key={ `destination-${ destination.id }` }
-                                                component={ Link }
-                                                to={ `/destinations/${ destination.id }` }
+                                                // component={ Link }
+                                                // to={ `/destinations/${ destination.id }` }
                                                 variant="outlined"
                                                 onMouseEnter={ handleDestinationEnter }
                                                 onMouseLeave={ handleDestinationLeave }
