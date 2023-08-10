@@ -138,14 +138,14 @@ class Itinerary( db.Model ):
         if isinstance( trip_id, int ):
             return trip_id
         else:
-            abort( 422, "Trip id must be an instance of User greater than 0." )
+            abort( 422, "Trip id must be an instance of User." )
     
     @validates( 'activity_id' )
     def validate_activity_id( self, key, activity_id ):
         if isinstance( activity_id, int ):
             return activity_id
         else:
-            abort( 422, "Activity id must be an instance of Activity greater than 0." )
+            abort( 422, "Activity id must be an instance of Activity." )
 
     
 class Trip( db.Model ):
@@ -259,12 +259,12 @@ class UserTrip( db.Model ):
     #     else:
     #         abort( 422, "User id must be an instance of User." )
 
-    # @validates( 'trip_id' )
-    # def validate_trip_id( self, key, trip_id ):
-    #     if isinstance( trip_id, int ):
-    #         return trip_id
-    #     else:
-    #         abort( 422, "Trip id must be an instance of Trip." )
+    @validates( 'trip_id' )
+    def validate_trip_id( self, key, trip_id ):
+        if isinstance( trip_id, int ):
+            return trip_id
+        else:
+            abort( 422, "Trip id must be an instance of Trip." )
 
     
 class Destination( db.Model ):
@@ -335,19 +335,19 @@ class TripDestination( db.Model ):
             "destination_name": self.destination.name
         }
     
-    @validates( 'trip_id' )
-    def validate_trip_id( self, key, trip_id ):
-        if isinstance( trip_id, int ):
-            return trip_id
-        else:
-            abort( 422, "Trip id must be an instance of Trip greater than 0." )
+    # @validates( 'trip_id' )
+    # def validate_trip_id( self, key, trip_id ):
+    #     if isinstance( trip_id, int ):
+    #         return trip_id
+    #     else:
+    #         abort( 422, "Trip id must be an instance of Trip." )
 
     @validates( 'destination_id' )
     def validate_destination_id( self, key, destination_id ):
         if isinstance( destination_id, int ):
             return destination_id
         else:
-            abort( 422, "Destination id must be an instance of Destination greater than 0." )
+            abort( 422, "Destination id must be an instance of Destination." )
 
     
 class Activity( db.Model ):
