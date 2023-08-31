@@ -46,13 +46,20 @@ function NavBar({ toggleTheme, isDarkMode }) {
                             Destinations
                         </Link>
                     </div>
+                    { user && (
+                        <div className="active">
+                            <Link to="/itineraries" className="link">
+                                Itinerary
+                            </Link>
+                        </div>
+                    )}
                     { user ? (
                         <div className="active user-icon-container">
                             <Link to="/trips" className="link">
                                 <img src={ UserIcon } alt="User Icon"></img>
                             </Link>
                         </div>
-                    ): (
+                    ) : (
                         <div className="active user-icon-container" >
                             <Link to="/login" className="link">
                                 <img src={ UserIcon } alt="User Icon"></img>
