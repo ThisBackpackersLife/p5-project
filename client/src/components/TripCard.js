@@ -214,7 +214,7 @@ function TripCard({ trip, selectTripId, deleteTrip, editTrip, removeDestination 
                                             <Button
                                                 key={ `itinerary-${ itinerary.id }` }
                                                 component={ Link }
-                                                to={ `/itineraries/${ itinerary.id }` }
+                                                to={ `/itineraries` }
                                                 variant="outlined"
                                             >
                                                 { itinerary.name }
